@@ -6,19 +6,13 @@ fi
 
 [ -z "$ROOT" ] && ROOT=
 
-echo "==> Installing /sbin/rc, /etc/minirc.conf, /etc/inittab"
-install -Dm755 rc "$ROOT"/sbin/rc
-if [ -f "$ROOT"/etc/minirc.conf ]; then
-    echo ":: Warning: '$ROOT/etc/minirc.conf' already exists!"
-    echo "   Moving it to '$ROOT/etc/minirc.conf.backup'."
-    mv "$ROOT"/etc/minirc.conf "$ROOT"/etc/minirc.conf.backup
-fi
-install -Dm644 minirc.conf "$ROOT"/etc/minirc.conf
+echo "==> Installing /etc/init.d/rc /etc/inittab"
+mkdir -p /etc/init.d
+install -Dm755 rc "$ROOT"/etc/init.d/
 install -Dm644 inittab "$ROOT"/etc/inittab
 
 echo "==> Installing extras"
 cd extra
-install -Dm644 _minirc "$ROOT/usr/share/zsh/site-functions/_minirc"
 install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
 
 echo "==> Linking busybox to /sbin/{init,halt,poweroff,reboot}"
