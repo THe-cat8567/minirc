@@ -57,7 +57,8 @@ you could add the following to the end of "rc".
 # /run/services is where the services are copied to in order to have a clean state every reboot
 mkdir -p /run/services
 cp -r /etc/init.d/services /run/services
-exec svscan /run/services```
+exec svscan /run/services
+```
 
 However for most desktop purposes a service manager is overkill and just using /etc/init.d/rc.local
 should suffice.
