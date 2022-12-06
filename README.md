@@ -52,15 +52,12 @@ The original minirc was able to deal with services, this feature was removed to 
 as daemontools[-encore], runsv, or s6 is ideal. For example to add support for svscan from daemontools
 you could add the following to the end of "rc".
 
-`
+```
 # /etc/init.d/services is the directory where services are stored
 # /run/services is where the services are copied to in order to have a clean state every reboot
-
-
 mkdir -p /run/services
 cp -r /etc/init.d/services /run/services
-exec svscan /run/services
-`
+exec svscan /run/services```
 
 However for most desktop purposes a service manager is overkill and just using /etc/init.d/rc.local
 should suffice.
@@ -68,11 +65,11 @@ should suffice.
 In order to create a sort of network dependency for services that need internet access the following
 can be added to rc.local.
 
-`
+```
 while ! ping -c 1 example.com ; do sleep 1 ; done
 # NETWORK DEPENDENT SERVICES GO HERE
 /usr/bin/ntpd -q -n -g -u ntp:ntp # example ntpd service
-`
+```
 
 
 Further configuration
