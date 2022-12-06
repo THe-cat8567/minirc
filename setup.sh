@@ -7,12 +7,11 @@ fi
 [ -z "$ROOT" ] && ROOT=
 
 echo "==> Installing /etc/init.d/rc /etc/inittab"
-mkdir -p /etc/init.d
+mkdir -pv /etc/init.d
 install -Dm755 rc "$ROOT"/etc/init.d/
 install -Dm644 inittab "$ROOT"/etc/inittab
 
-echo "==> Installing extras"
-cd extra
+echo "==> Installing shutdown.sh"
 install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
 
 echo "==> Linking busybox to /sbin/{init,halt,poweroff,reboot}"
