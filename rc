@@ -97,4 +97,4 @@ else
 fi
 
 cp -R /etc/init.d/services /run/services
-runsvdir -P /run/services
+(exec runsvdir -P /run/services) &
