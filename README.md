@@ -10,6 +10,8 @@ on other distributions as well.
 
 The "rc" script should also work as "1" for runit. 
 
+NOTE: please make sure you aren't using the /run/services directory as the rc script
+by default WILL REMOVE THAT DIRECTORY AND EVERYTHING IN IT. You have been warned.
 
 Installing
 ----------

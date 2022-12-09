@@ -84,5 +84,17 @@ sysctl --system
 
 if [ -x /etc/init.d/rc.local ]; then
 	echo_color 3 loading /etc/init.d/rc.local...
-	/etc/init.d/rc.local
+	(exec /etc/init.d/rc.local) &
 fi
+
+
+echo_color 3 starting services...
+
+if [ -d /run/services ]; then
+	rm -rf /run/services
+else
+	mkdir -p /run/services 
+fi
+
+cp -R /etc/init.d/services /run/services
+runsvdir -P /run/services
