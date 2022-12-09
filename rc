@@ -92,8 +92,6 @@ echo_color 3 starting services...
 
 if [ -d /run/services ]; then
 	rm -rf /run/services
-else
-	mkdir -p /run/services 
 fi
 
 cp -R /etc/init.d/services /run/services
