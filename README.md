@@ -49,30 +49,11 @@ for poweroff to the process 1.
 Dealing with services
 ---------------------
 
-The original minirc was able to deal with services, this feature was removed to simplify the
-"rc" script. If you want to manage services using a dedicated service manager such
-as daemontools[-encore], runsv, or s6 is ideal. For example to add support for svscan from daemontools
-you could add the following to the end of "rc".
+Services can be managed through the runsvdir, runsv, and sv tools. The deafult
+service directory is /etc/init.d/services, with the run time directory being
+/run/services. See the runit docs for more info.
 
-```
-# /etc/init.d/services is the directory where services are stored
-# /run/services is where the services are copied to in order to have a clean state every reboot
-mkdir -p /run/services
-cp -r /etc/init.d/services /run/services
-exec svscan /run/services
-```
-
-However for most desktop purposes a service manager is overkill and just using /etc/init.d/rc.local
-should suffice.
-
-In order to create a sort of network dependency for services that need internet access the following
-can be added to rc.local.
-
-```
-while ! ping -c 1 example.com ; do sleep 1 ; done
-# NETWORK DEPENDENT SERVICES GO HERE
-/usr/bin/ntpd -q -n -g -u ntp:ntp # example ntpd service
-```
+rc.local can also be used for "oneshot" type services.
 
 
 Further configuration
