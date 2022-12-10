@@ -14,8 +14,8 @@ install -Dm644 inittab "$ROOT"/etc/inittab
 echo "==> Installing shutdown.sh"
 install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
 
-echo "==> Linking busybox to /sbin/{init,halt,poweroff,reboot}"
-for i in init halt poweroff reboot runsv runsvdir; do
+echo "==> Linking busybox to /sbin/{init,halt,poweroff,reboot, runsv, runsvdir, sv, svc, svok}"
+for i in init halt poweroff reboot runsv runsvdir sv svc svok; do
     ln -sf $(which busybox) "$ROOT"/sbin/$i
 done
 
