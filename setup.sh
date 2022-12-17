@@ -21,6 +21,8 @@ if [ "$2" == --uninstall ]; then
 		else
 			echo "$i is not a symlink to busybox, not removing"
 		fi
+	done
+	
 	exit 0	
 fi	
 
