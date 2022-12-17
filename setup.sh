@@ -15,9 +15,9 @@ if [ "$2" == --uninstall ]; then
 		rm -fv "$ROOT"/sbin/shutdown
 	fi
 
-	for i in "$BUSYBOX_CMDS"; do
-		if [ $(basename $(readlink $i)) == busybox ]; then
-			rm -fv $i
+	for i in $BUSYBOX_CMDS; do
+		if [ $(basename $(readlink "$ROOT"/sbin/$i)) == busybox ]; then
+			rm -fv "$ROOT"/sbin/$i
 		else
 			echo "$i is not a symlink to busybox, not removing"
 		fi
