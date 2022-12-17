@@ -1,6 +1,20 @@
 minirc - minimalistic rc script
 ===============================
 
+rc.init should not be modified, use rc.local for services et al
+use /etc/rc
+rc.local is forked
+rc.shutdown.local is blocking
+use BUSYBOX_CMDS var to choose how many busybox symlinks you want
+ROOT to speicify root 
+sources
+void-runit
+minirc
+archlinux initscripts
+kiss linux init scripts
+shinit for halt
+ubase for halt
+
 The script "rc" is a minimalistic init script made for use with busybox init.
 It handles one time system initialization. You should customize the "rc" script
 to your needs, at a minimum by changing the timezone if your timezone is not America/Los Angeles.

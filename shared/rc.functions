@@ -1,0 +1,15 @@
+# https://github.com/void-linux/void-runit/blob/master/functions#L3
+msg() {
+    # bold
+    printf "\033[1m=> $@\033[m\n"
+}
+
+# https://github.com/void-linux/void-runit/blob/master/functions#L13
+msg_error() {
+    # bold/red
+    printf "\033[1m\033[31mERROR: $@\033[m\n"
+}
+
+pmount () {
+	mountpoint -q "${3}" || mount -t "${1}" "${2}" "${3}" -o "${4}"
+}

@@ -1,0 +1,46 @@
+#!/bin/sh
+
+PATH="/usr/bin:/usr/sbin"
+. /etc/rc/rc.functions
+
+if [ -x /etc/rc/rc.shutdown.local ]; then
+	msg loading /etc/rc/rc.shutdown.local ...
+	/etc/rc/rc.shutdown.local
+fi
+
+hwclock --systohc --localtime
+
+# NOTE: you don't have to kill udev via the udevadm command, the TERM signal will do that as well
+# udevadm control --exit
+
+# NOTE: if you do want to run this script directly make sure your session doesnt have
+# any other processes (i.e. make sure you run in a new session) or else they wont be killed
+# and that might result in an unclean unmount of the filesystems, or save yourself the trouble
+# and signal init to run this script for you
+msg killing all processes ...
+pkill --inverse -s0,1 -TERM
+sleep 1
+pkill --inverse -s0,1 -KILL
+
+msg disabling swap ...
+swapoff -a
+
+msg unmounting filesystems ...
+umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
+mount -o remount,ro /
+sync
+
+# NOTE: only sinit uses the following poweroff/reboot commands, busybox will handle this for us
+case $1 in
+	poweroff)
+		poweroff
+		;;
+	reboot)
+		reboot
+		;;
+	*)
+		# busybox
+		true
+		;;
+esac
+

@@ -1,44 +1,92 @@
 #!/bin/sh
+
+[ -z "$DESTDIR" ] && DESTDIR=
+[ -z "$PREFIX" ] && PREFIX=/usr/sbin
+[ -z "$RC_DIR" ] && RC_DIR=/etc/rc
+[ -z "$BUSYBOX_CMDS" ] && BUSYBOX_CMDS="init halt poweroff reboot"
+
+RC_FILES="rc.init rc.functions rc.shutdown rc.local rc.shutdown.local"
+
+usage() {
+	echo "setup.sh: --force --install|--uninstall sinit|busybox"
+}
+
 if [ "$1" != --force ]; then
-    echo "Please read the setup script and confirm that it doesn't break your system."
+    echo "Please read the setup script and confirm that it doesn't break your system or destroy valuable data."
+    echo "Then run it with --force as the first argument"
+    usage
     exit 1
 fi
 
-[ -z "$ROOT" ] && ROOT=
-BUSYBOX_CMDS="init halt poweroff reboot runsv runsvdir sv svc svok"
+case "$2" in
+	--install|--uninstall)
+		true
+		;;
+	*)
+		usage
+		exit 1
+		;;
+esac
 
-if [ "$2" == --uninstall ]; then
-	rm -rfv /etc/init.d /etc/inittab
+case "$3" in
+	sinit|busybox)
+		true
+		;;
+	*)
+		usage
+		exit 1
+		;;
+esac
 
-	# seldom is /sbin/shutdown a .sh script unless it was installed by minirc
-	if file "$ROOT"/sbin/shutdown | grep -q 'shell script'; then
-		rm -fv "$ROOT"/sbin/shutdown
-	fi
+if [ $(id -u) != 0 ]; then
+	echo "you must run this script as root"
+	exit 1
+fi
 
-	for i in $BUSYBOX_CMDS; do
-		if [ $(basename $(readlink "$ROOT"/sbin/$i)) == busybox ]; then
-			rm -fv "$ROOT"/sbin/$i
-		else
-			echo "$i is not a symlink to busybox, not removing"
-		fi
+if [ "$2" == --install ]; then
+	for i in $RC_FILES; do	
+		install -Dm755 shared/"$i" "${DESTDIR}${RC_DIR}"/"$i"
 	done
 	
-	exit 0	
-fi	
+	if [ "$3" == sinit ]; then
+		cc sinit/reboot.c -o sinit/reboot
+		cc sinit/poweroff.c -o sinit/poweroff
+		install -Dm755 sinit/reboot "${DESTDIR}${PREFIX}"/reboot
+		install -Dm755 sinit/poweorff "${DESTDIR}${PREFIX}"/poweorff
+		echo "Please make sure your sinit is configured to use $RC_DIR/rc.init and $RC_DIR/rc.shutdown with the parameters reboot and poweroff"
+		echo "Otherwise your system will fail to boot!"
+		exit 0
+	fi
 
-echo "==> Installing /etc/init.d /etc/init.d/rc /etc/init.d/rc.local /etc/init.d/rc.shutdown /etc/inittab /etc/init.d/services"
-mkdir -pv /etc/init.d/services
-install -Dm755 rc "$ROOT"/etc/init.d/
-install -Dm755 rc.local "$ROOT"/etc/init.d/
-install -Dm755 rc.shutdown "$ROOT"/etc/init.d/
-install -Dm644 inittab "$ROOT"/etc/inittab
+	if [ "$3" == busybox ]; then
+		install -Dm644 busybox/inittab /etc/inittab
+		for i in $BUSYBOX_CMDS; do
+			ln -sfv $(which busybox) "${DESTDIR}${PREFIX}"/"$i"
+		done
+	fi	
+fi
 
-echo "==> Installing shutdown.sh"
-install -Dm755 shutdown.sh "$ROOT/sbin/shutdown"
+if [ "$2" == --uninstall ]; then
+	for i in $RC_FILES; do
+		rm -fv "$RC_DIR"/"$i"
+	done
+	# if the directory is not empty that means the user has made some changes
+	if ! rmdir "$RC_DIR"; then
+		echo "$RC_DIR" has some files this script did not install, please remove it manually
+	fi
 
-echo "==> Linking busybox to /sbin/{init,halt,poweroff,reboot, runsv, runsvdir, sv, svc, svok}"
-for i in "$BUSYBOX_CMDS"; do
-    ln -sf $(which busybox) "$ROOT"/sbin/$i
-done
+	if [ "$3" == sinit ]; then
+		rm -fv "${DESTDIR}${PREFIX}"/reboot "${DESTDIR}${PREFIX}"/poweroff
+	fi
 
-# Run "./setup.sh --force [--uninstall]" to use the script
+	if [ "$3" == busybox ]; then
+		rm -fv /etc/inittab
+		for i in $BUSYBOX_CMDS; do
+			if [ $(basename $(readlink "${DESTDIR}${PREFIX}"/"$i")) = busybox ]; then
+				rm -fv "${DESTDIR}${PREFIX}"/"$i"
+			else
+				echo $i is not a link to busybox, not removing
+			fi
+		done
+	fi
+fi
