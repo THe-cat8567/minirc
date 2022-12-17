@@ -52,7 +52,8 @@ if [ "$2" == --install ]; then
 		cc sinit/reboot.c -o sinit/reboot
 		cc sinit/poweroff.c -o sinit/poweroff
 		install -Dm755 sinit/reboot "${DESTDIR}${PREFIX}"/reboot
-		install -Dm755 sinit/poweorff "${DESTDIR}${PREFIX}"/poweorff
+		install -Dm755 sinit/poweroff "${DESTDIR}${PREFIX}"/poweroff
+		ln -sfv $(which sinit) "${DESTDIR}${PREFIX}"/init
 		echo "Please make sure your sinit is configured to use $RC_DIR/rc.init and $RC_DIR/rc.shutdown with the parameters reboot and poweroff"
 		echo "Otherwise your system will fail to boot!"
 		exit 0

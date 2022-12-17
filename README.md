@@ -14,6 +14,7 @@ archlinux initscripts
 kiss linux init scripts
 shinit for halt
 ubase for halt
+should probably mention that the setup script is intended for distros with /sbin -> /usr/sbin
 
 The script "rc" is a minimalistic init script made for use with busybox init.
 It handles one time system initialization. You should customize the "rc" script
