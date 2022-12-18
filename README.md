@@ -67,7 +67,13 @@ Further configuration
 About
 -----
 
-* Authors: Roman Zimbelmann, Sam Stuewe
+* Authors: Roman Zimbelmann, Sam Stuewe, me (duh)
 * License: GPL2
 
+External Sources
+-----
 
+* https://github.com/void-linux/void-runit
+* https://github.com/kisslinux/init
+* https://github.com/hut/minirc
+* https://bitbucket.org/TZ86/initscripts-fork/src

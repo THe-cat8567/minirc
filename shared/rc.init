@@ -17,7 +17,7 @@ pmount cgroup2 cgroup2 /sys/fs/cgroup nsdelegate
 msg 'setting up loopback device ...'
 ip link set up dev lo
  
-msg initializing udev ...
+msg 'initializing udev ...'
 if [ -f /usr/lib/systemd/systemd-udevd ]; then
  	/usr/lib/systemd/systemd-udevd --daemon
     /usr/bin/udevadm trigger --action=add --type=subsystems
@@ -30,9 +30,17 @@ elif [ -f /usr/bin/mdev ]; then
     busybox mdev -s
     echo /sbin/mdev > /proc/sys/kernel/hotplug
 else
-	msg_error could not find udev or mdev ...
+	msg_error 'could not find udev or mdev ...'
 	/bin/sh
 fi
+
+# for some reason these arent created already? (systemd-udevd problem?)
+# https://github.com/kisslinux/init/blob/master/lib/init/rc.boot#L23
+msg 'creating fd files in /dev ...'
+ln -s /proc/self/fd /dev/fd
+ln -s fd/0          /dev/stdin
+ln -s fd/1          /dev/stdout
+ln -s fd/2          /dev/stderr
 
 msg 'setting hostname ...'
 cat > /proc/sys/kernel/hostname < /etc/hostname
