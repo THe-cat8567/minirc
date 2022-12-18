@@ -1,15 +1,18 @@
 #!/bin/sh
 
+# use `run` if you wish to run a cmd as follows: (exec cmd) &
+. /etc/rc/rc.functions
+
 # getty
-(exec respawn /sbin/agetty -8 -s 38400 -a me --noclear tty1 linux) &
-(exec respawn /sbin/agetty -8 -s 38400 tty2 linux) &
-(exec respawn /sbin/agetty -8 -s 38400 tty3 linux) &
-(exec respawn /sbin/agetty -8 -s 38400 tty4 linux) &
+run respawn /sbin/agetty -8 -s 38400 -a me --noclear tty1 linux
+run respawn /sbin/agetty -8 -s 38400 tty2 linux
+run respawn /sbin/agetty -8 -s 38400 tty3 linux
+run respawn /sbin/agetty -8 -s 38400 tty4 linux
 
 # non-network daemons 
-(exec dhcpcd -M) &
-(exec acpid) &
+run dhcpcd -M
+run acpid
 
 # network
 while ! ping -c 1 example.com >/dev/null 2>&1; do sleep 1 ; done
-(exec ntpd -q -n -g -u ntp:ntp) &
+run ntpd -q -n -g -u ntp:ntp

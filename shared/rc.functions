@@ -13,3 +13,7 @@ msg_error() {
 pmount () {
 	mountpoint -q "${3}" || mount -t "${1}" "${2}" "${3}" -o "${4}"
 }
+
+run () {
+	(exec $@) &
+}

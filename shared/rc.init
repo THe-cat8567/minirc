@@ -71,5 +71,5 @@ sysctl --system
 
 if [ -x /etc/rc/rc.local ]; then
 	msg 'forking /etc/rc/rc.local ...'
-	(exec /etc/rc/rc.local) &
+	run /etc/rc/rc.local
 fi
