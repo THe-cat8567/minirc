@@ -47,13 +47,16 @@ if [ "$2" == --install ]; then
 	for i in $RC_FILES; do	
 		install -Dm755 shared/"$i" "${DESTDIR}${RC_DIR}"/"$i"
 	done
+	cc utils/respawn.c -o utils/respawn
+	install -Dm755 utils/respawn "${DESTDIR}${PREFIX}"/respawn
 	
 	if [ "$3" == sinit ]; then
 		cc sinit/reboot.c -o sinit/reboot
 		cc sinit/poweroff.c -o sinit/poweroff
 		install -Dm755 sinit/reboot "${DESTDIR}${PREFIX}"/reboot
 		install -Dm755 sinit/poweroff "${DESTDIR}${PREFIX}"/poweroff
-		ln -sfv $(which sinit) "${DESTDIR}${PREFIX}"/init
+		#ln -sfv $(which sinit) "${DESTDIR}${PREFIX}"/init # does not work
+		ln -sfv $(which sinit) /sbin/init
 		echo "Please make sure your sinit is configured to use $RC_DIR/rc.init and $RC_DIR/rc.shutdown with the parameters reboot and poweroff"
 		echo "Otherwise your system will fail to boot!"
 		exit 0
