@@ -34,6 +34,9 @@ Dealing with services
 
 It's good practice to put service related code in /etc/rc/rc.local, feel free to use a process supervisor or whatever you want.
 
+The utility respawn is provided to allow for constant spawning of a process, this
+is useful for getty's in case you do not want to use inittab (for busybox) or you dont
+want to use a service manager.
 
 Further configuration
 ---------------------
