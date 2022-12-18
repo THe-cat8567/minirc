@@ -1,5 +1,2 @@
-[ ] easy getty respawn mechanism for sinit (ideally in C)
-so gotta learn some unix programming, fork(),exec()
-
-[ ] patch sinit with the 3 lines it takes to integrate the seperated
-reboot/poweroff functionality (literally the include and two reboot() lines)
+[ ] vfork() ?
+[ ] `(exec cmd) &` is ugly, make a wrapper function in rc.functions

@@ -1,17 +1,15 @@
 #!/bin/sh
 
 # getty
-#(exec respawn /sbin/agetty -8 -s 38400 -a me --noclear tty1 linux) &
-#(exec respawn /sbin/agetty -8 -s 38400 tty2 linux) &
-#(exec respawn /sbin/agetty -8 -s 38400 tty3 linux) &
-#(exec respawn /sbin/agetty -8 -s 38400 tty4 linux) &
+(exec respawn /sbin/agetty -8 -s 38400 -a me --noclear tty1 linux) &
+(exec respawn /sbin/agetty -8 -s 38400 tty2 linux) &
+(exec respawn /sbin/agetty -8 -s 38400 tty3 linux) &
+(exec respawn /sbin/agetty -8 -s 38400 tty4 linux) &
 
 # non-network daemons 
-dhcpcd -M
-acpid
+(exec dhcpcd -M) &
+(exec acpid) &
 
 # network
 while ! ping -c 1 example.com >/dev/null 2>&1; do sleep 1 ; done
-ntpd -q -n -g -u ntp:ntp
-
-
+(exec ntpd -q -n -g -u ntp:ntp) &

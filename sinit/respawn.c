@@ -14,6 +14,9 @@ int main(int argc, char* argv[])
 	
 	pid_t pid;
 	int status;
+
+	setsid();
+	
 	while (1)
 	{
 		pid = fork();
