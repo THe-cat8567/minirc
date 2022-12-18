@@ -55,8 +55,8 @@ if [ "$2" == --install ]; then
 		cc sinit/poweroff.c -o sinit/poweroff
 		install -Dm755 sinit/reboot "${DESTDIR}${PREFIX}"/reboot
 		install -Dm755 sinit/poweroff "${DESTDIR}${PREFIX}"/poweroff
-		#ln -sfv $(which sinit) "${DESTDIR}${PREFIX}"/init # does not work
-		ln -sfv $(which sinit) /sbin/init
+		install -Dm755 sinit/shutdown.sh "${DESTDIR}${PREFIX}"/shutdown
+		echo "Please copy/link sinit to /sbin/init via cp or ln"
 		echo "Please make sure your sinit is configured to use $RC_DIR/rc.init and $RC_DIR/rc.shutdown with the parameters reboot and poweroff"
 		echo "Otherwise your system will fail to boot!"
 		exit 0
@@ -78,9 +78,10 @@ if [ "$2" == --uninstall ]; then
 	if ! rmdir "$RC_DIR"; then
 		echo "$RC_DIR" has some files this script did not install, please remove it manually
 	fi
+	rm -fv "${DESTDIR}${PREFIX}/respawn"
 
 	if [ "$3" == sinit ]; then
-		rm -fv "${DESTDIR}${PREFIX}"/reboot "${DESTDIR}${PREFIX}"/poweroff
+		rm -fv "${DESTDIR}${PREFIX}"/reboot "${DESTDIR}${PREFIX}"/poweroff "${DESTDIR}${PREFIX}"/shutdown
 	fi
 
 	if [ "$3" == busybox ]; then

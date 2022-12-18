@@ -1,4 +1,2 @@
-[ ] vfork() ?
-[ ] `(exec cmd) &` is ugly, make a wrapper function in rc.functions
 [ ] SIGTERM handler for respawn, currently just the respawn program dies, it *should* also kill its child process
 perhaps make it pass along all signals?
