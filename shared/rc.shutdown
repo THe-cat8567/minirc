@@ -4,7 +4,7 @@ PATH="/usr/bin:/usr/sbin"
 . /etc/rc/rc.functions
 
 if [ -x /etc/rc/rc.shutdown.local ]; then
-	msg loading /etc/rc/rc.shutdown.local ...
+	msg 'loading /etc/rc/rc.shutdown.local ...'
 	/etc/rc/rc.shutdown.local
 fi
 
@@ -17,15 +17,15 @@ hwclock --systohc --localtime
 # any other processes (i.e. make sure you run in a new session) or else they wont be killed
 # and that might result in an unclean unmount of the filesystems, or save yourself the trouble
 # and signal init to run this script for you
-msg killing all processes ...
+msg 'killing all processes ...'
 pkill --inverse -s0,1 -TERM
 sleep 1
 pkill --inverse -s0,1 -KILL
 
-msg disabling swap ...
+msg 'disabling swap ...'
 swapoff -a
 
-msg unmounting filesystems ...
+msg 'unmounting filesystems ...'
 umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
 mount -o remount,ro /
 sync
@@ -43,4 +43,3 @@ case $1 in
 		true
 		;;
 esac
-

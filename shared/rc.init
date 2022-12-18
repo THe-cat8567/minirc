@@ -3,7 +3,7 @@
 PATH="/usr/bin:/usr/sbin"
 . /etc/rc/rc.functions
 
-msg mounting API filesystems ...
+msg 'mounting API filesystems ...'
 pmount proc proc /proc nosuid,noexec,nodev
 pmount sysfs sys /sys nosuid,noexec,nodev
 pmount tmpfs run /run mode=0755,nosuid,nodev
@@ -14,7 +14,7 @@ pmount tmpfs shm /dev/shm mode=1777,nosuid,nodev
 [ -d /sys/firmware/efi/efivars ] && pmount efivarfs efivarfs /sys/firmware/efi/efivars nosuid,noexec,nodev
 pmount cgroup2 cgroup2 /sys/fs/cgroup nsdelegate
 
-msg setting up loopback device ...
+msg 'setting up loopback device ...'
 ip link set up dev lo
  
 msg initializing udev ...
@@ -34,34 +34,34 @@ else
 	/bin/sh
 fi
 
-msg setting hostname ...
+msg 'setting hostname ...'
 cat > /proc/sys/kernel/hostname < /etc/hostname
 
-msg mounting non-network filesystems ...
+msg 'mounting non-network filesystems ...'
 mount -o remount,ro /
 fsck -A -T -a -t noopts=_netdev || /bin/sh
 mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev
 mount -o remount,rw /
 
-msg enabling swap ...
+msg 'enabling swap ...'
 swapon -a
 
-msg setting time ...
+msg 'setting time ...'
 export TZ=America/Los_Angeles
 hwclock --systz --localtime
 
-msg creating misc files ...
+msg 'creating misc files ...'
 install -m0664 -o root -g utmp /dev/null /var/log/wtmp
 install -m0600 -o root -g utmp /dev/null /var/log/btmp
 install -dm1777 /tmp/.X11-unix /tmp/.ICE-unix
 
-msg logging dmesg to /var/log/dmesg.log ...
+msg 'logging dmesg to /var/log/dmesg.log ...'
 dmesg > /var/log/dmesg.log
 
-msg loading sysctl settings...
+msg 'loading sysctl settings...'
 sysctl --system
 
 if [ -x /etc/rc/rc.local ]; then
-	msg forking /etc/rc/rc.local ...
+	msg 'forking /etc/rc/rc.local ...'
 	(exec /etc/rc/rc.local) &
 fi
