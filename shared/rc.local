@@ -12,7 +12,20 @@ run respawn /sbin/agetty -8 -s 38400 tty4 linux
 # non-network daemons 
 run dhcpcd -M
 run acpid
+run dbus-daemon --system
 
 # network
 while ! ping -c 1 example.com >/dev/null 2>&1; do sleep 1 ; done
 run ntpd -q -n -g -u ntp:ntp
+run dnsmasq -k --enable-dbus --user=dnsmasq
+
+# libvirt, network-dependent
+[ -f /etc/conf.d/virtlogd ] && . /etc/conf.d/virtlogd
+run virtlogd ${VIRTLOGD_ARGS}
+[ -f /etc/conf.d/virtlockd ] && . /etc/conf.d/virtlockd
+run virtlockd ${VIRTLOCKD_ARGS}
+# virtlogd and virtlockd are dependencies of libvirt, give some time
+sleep 5
+[ -f /etc/conf.d/libvirtd ] && . /etc/conf.d/libvirtd
+run libvirtd ${LIBVIRTD_ARGS:=--timeout 120}
+

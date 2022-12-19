@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
 	
 	pid_t pid;
 	int status;
+	int es;
 
 	setsid();
 	
@@ -27,15 +28,18 @@ int main(int argc, char* argv[])
 				exit(1);
 			case 0:
 				execvp(argv[1], argv+1);
+				es = errno;
 				perror("Error");
-				exit(1);
+				exit(es);
 				break;
 			default:
 				waitpid(pid, &status, 0);
-				// do not respawn failing children
+				// stop respawning only if the file cannot be found
+				if(WIFSIGNALED(status))
+					continue;
 				if (!WIFEXITED(status))
-					exit(1);
-				if (WEXITSTATUS(status) != 0)
+					exit(1);					
+				if (WEXITSTATUS(status) == 2)
 					exit(status);
 				break;
 		}
