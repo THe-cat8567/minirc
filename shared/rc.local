@@ -12,6 +12,7 @@ run respawn /sbin/agetty -8 -s 38400 tty4 linux
 # non-network daemons 
 run dhcpcd -M
 run acpid
+! [ -d /run/dbus ] && { mkdir /run/dbus && chown dbus:dbus /run/dbus ;}
 run dbus-daemon --system
 
 # network
