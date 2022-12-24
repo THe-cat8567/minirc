@@ -1,2 +1,5 @@
 [ ] SIGTERM handler for respawn, currently just the respawn program dies, it *should* also kill its child process
 perhaps make it pass along all signals?
+
+[ ] shutdown/reboot/poweroff are always overwritten on upgrade, use different names, use init= parameter instead of
+symlinking to init for sinit 
