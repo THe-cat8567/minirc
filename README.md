@@ -14,7 +14,9 @@ Dependencies: busybox or sinit, optionally eudev or systemd (for udev)
 
 2. Remove "init=..." from your kernel parameters (if it is there) so that the
    default value "init=/sbin/init" is used.  Check the docs of your boot loader
-   on how to change the kernel parameters.
+   on how to change the kernel parameters. The panic kernel parameter can be set to
+   n seconds to allow for automatic rebooting on kernel failure (e.g. init not found), this
+   is quite useful when testing the init.
 
 3. Reboot
 
