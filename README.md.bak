@@ -1,7 +1,7 @@
 minirc - minimalistic init setup
 ===============================
 
-A set of rc scripts for busybox init or sinit. It should also work with runit, s6, or dinit (though dinit isn't really meant
+A set of rc scripts for busybox init or sinit. It should also work with runit, s6, or dinit (though dinit isnt really meant
 for single rc.sysinit style scripts), given you modify the setup procedure. Please read all files in shared/ to make sure they
 do what you want.
 
@@ -25,7 +25,7 @@ Shutdown & Reboot
 -----------------
 
 For sinit, USR1 is poweroff, INT is reboot, do NOT run the commands `poweroff` or `reboot` directly, they
-will not unmount the file systems cleanly or do anything except issue the reboot() syscall.
+will not unmount the filesystems cleanly or do anything except issue the reboot() syscall.
 
 For busybox, you can just run `poweroff` or `reboot`. Or you can signal, USR2 for poweroff, TERM for reboot.
 NOTE: halt and shutdown do not appear to power down the device at the ACPI level, use poweroff instead.
@@ -37,7 +37,7 @@ Dealing with services
 It's good practice to put service related code in /etc/rc/rc.local, feel free to use a process supervisor or whatever you want.
 
 The utility respawn is provided to allow for constant spawning of a process, this
-is useful for getty's in case you do not want to use inittab (for busybox) or you don't
+is useful for getty's in case you do not want to use inittab (for busybox) or you dont
 want to use a service manager.
 
 Further configuration
@@ -65,7 +65,7 @@ Further configuration
    Minirc will run /etc/rc/rc.shutdown.local and wait for it to return 
    before shutting down if the file exists and has the 
    executable bit set. This allows the user to run commands before minirc kills all processes and
-   unmounts the file systems. This is a good place to shutdown "sensitive" programs that might take
+   unmounts the filesystems. This is a good place to shutdown "sensitive" programs that might take
    a while to shutdown properly (e.g. databases).
 
 
